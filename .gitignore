@@ -1,0 +1,10 @@
+target/
+Cargo.lock
+dist-newstyle/
+newdist/
+_build
+*.prof
+*.exe
+*.dll
+*.o
+aoc-gitcrypt.key
