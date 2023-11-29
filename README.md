@@ -8,12 +8,12 @@ The current ambitions are:
  * Have some fun
  * Keep pace, solve both parts of the daily puzzle on the day it is
    posted.
- * Set a time box of max 2 hour per day.
+ * Set a time box of max 2 hours per day.
 
 Other self-imposed rules:
 
  * Leave my first solutions as they where during the event (some light
-   clean up is allowed). Still, it is allowed to _add_ alternative
+   clean up is allowed). However, it is still allowed to _add_ alternative
    solutions or implementations in different languages.
  * The solution for each day should be self-contained. That is, it is
    OK to use extra packages for a given language, but I don't want to
@@ -40,7 +40,7 @@ repository by accident. That is:
   
   * Specify that `input.txt` files should be encrypted in the `.gitattributes` file:
   
-    ```.gitattributes
+    ```.bash
     # .gitattributes
     **/input.txt filter=git-crypt diff=git-crypt
     ```
