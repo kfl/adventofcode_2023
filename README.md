@@ -48,7 +48,7 @@ repository by accident. That is:
   * Finish setting `git-crypt` up (not sure these are needed, but I
     once saw good thing happening when I did them):
   
-  ```
-  git-crypt unlock ./aoc-gitcrypt.key
-  git-crypt status -f
-  ```
+    ```
+    git-crypt unlock ./aoc-gitcrypt.key
+    git-crypt status -f
+    ```
