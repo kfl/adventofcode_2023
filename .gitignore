@@ -7,4 +7,5 @@ _build
 *.exe
 *.dll
 *.o
-aoc-gitcrypt.key
+/aoc-gitcrypt.key
+/session_cookie.txt
