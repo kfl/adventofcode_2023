@@ -51,26 +51,6 @@ val test2 = ["two1nine",
              "zoneight234",
              "7pqrstsixteen"]
 
-fun scanNumWrong cs =
-    case cs of
-        #"o" :: #"n" :: #"e" ::  cs => SOME(#"1", cs)
-      | #"t" :: #"w" :: #"o" ::  cs => SOME(#"2", cs)
-      | #"t" :: #"h" :: #"r" :: #"e" :: #"e" ::  cs => SOME(#"3", cs)
-      | #"f" :: #"o" :: #"u" :: #"r" ::  cs => SOME(#"4", cs)
-      | #"f" :: #"i" :: #"v" :: #"e" ::  cs => SOME(#"5", cs)
-      | #"s" :: #"i" :: #"x" ::  cs => SOME(#"6", cs)
-      | #"s" :: #"e" :: #"v" :: #"e" :: #"n" ::  cs => SOME(#"7", cs)
-      | #"e" :: #"i" :: #"g" :: #"h" :: #"t" ::  cs => SOME(#"8", cs)
-      | #"n" :: #"i" :: #"n" :: #"e" ::  cs => SOME(#"9", cs)
-      | c :: cs => if Char.isDigit c then SOME(c, cs) else NONE
-      | _ => NONE
-
-fun scanWrong [] = []
-  | scanWrong cs =
-    case scanNumWrong cs of
-        SOME(c, cs) => c :: scanWrong cs
-      | _ => scanWrong (tl cs)
-
 fun scanNum cs =
     case cs of
         #"o" :: #"n" :: #"e" :: _ => SOME #"1"
