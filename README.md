@@ -19,6 +19,8 @@ Other self-imposed rules:
    OK to use extra packages for a given language, but I don't want to
    make my own AoC library or framework used across all days.
 
+See [my notes](./notes.md) for a log of reflections for the daily
+puzzles (contains spoilers).
 
 Practical setup
 ---------------
