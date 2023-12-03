@@ -27,9 +27,12 @@ Day 3: Gear Ratios
 
 **Parsing strategy:** List manipulation.
 
-**Thoughts on the puzzle:** The parser ends up building a map
-representing a schematics, which means that the parser ends up with a
-fair amount of booking for indices. The code could possible be made
+**Thoughts on the puzzle:** The parser builds a map representing a
+schematics, which means that the parser needs to do a fair amount of
+bookkeeping for indices and so on. The code could possibly be made
 easier to read using a state monad to keep track of `i`, `j`, the
-current parsed number, the columns of the parsed number and schematic
-being constructed.
+current parsed number, the columns of the parsed number and the
+schematic being constructed.
+
+Once the schematics is constructed it's fairly straightforward to write
+the various queries for the two parts.
