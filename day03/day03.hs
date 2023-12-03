@@ -1,5 +1,4 @@
 {-# LANGUAGE Strict #-}
-{-# OPTIONS_GHC -Wno-x-partial #-}
 module Main where
 
 import qualified Data.Char as C
