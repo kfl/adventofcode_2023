@@ -19,3 +19,17 @@ Day 2: Cube Conundrum
 
 **Thoughts on the puzzle:** All done with list manipulation.
 
+
+Day 3: Gear Ratios
+------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** List manipulation.
+
+**Thoughts on the puzzle:** The parser ends up building a map
+representing a schematics, which means that the parser ends up with a
+fair amount of booking for indices. The code could possible be made
+easier to read using a state monad to keep track of `i`, `j`, the
+current parsed number, the columns of the parsed number and schematic
+being constructed.
