@@ -26,11 +26,9 @@ let part1 input =
     Seq.map points input
     |> Seq.sum
 
-let rec addCopies i m ns =
-    match i, m, ns with
-        | 0, _, rest -> rest
-        | i, m, (n :: rest) -> (m+n) :: addCopies (i-1) m rest
-        | _ -> failwith "Impossible"
+let addCopies i m ns =
+    let (pre, post) = List.splitAt i ns
+    (List.map (fun n -> n+m) pre) @ post
 
 let game acc card =
     match acc with
