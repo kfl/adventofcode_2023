@@ -36,3 +36,16 @@ schematic being constructed.
 
 Once the schematics is constructed it's fairly straightforward to write
 the various queries for the two parts.
+
+
+Day 4: Scratchcards
+-------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting
+
+**Thoughts on the puzzle:** Nice puzzle. For once, recursion over
+lists seemed just right and couldn't be easily done with higher order
+functions (at least not without a more involved accumulating
+parameter).
