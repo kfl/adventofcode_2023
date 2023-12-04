@@ -50,6 +50,15 @@ part2 :: Input -> Int
 part2 input = game 0 $ map (, 1) input
 answer2 = part2 <$> input
 
+part2Alternative input = result
+  where copies = repeat 1
+        addCopies 0 _ rest = rest
+        addCopies i m (n : rest) = (m+n) : addCopies (i-1) m rest
+        game (n : copies, acc) card = (addCopies m n copies, acc+n)
+          where m = matches card
+        (_, result) = foldl game (copies, 0) input
+
+
 main = do
   inp <- input
   print $ part1 inp
