@@ -45,7 +45,11 @@ Day 4: Scratchcards
 
 **Parsing strategy:** String splitting
 
-**Thoughts on the puzzle:** Nice puzzle. For once, recursion over
+**Thoughts on the puzzle:** Nice puzzle. For once recursion over
 lists seemed just right and couldn't be easily done with higher order
 functions (at least not without a more involved accumulating
 parameter).
+
+Added an alternative version made with `foldl`, it's not as bad I
+thought it would be. Also ported the solution to F#.
+

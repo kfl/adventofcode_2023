@@ -52,8 +52,8 @@ answer2 = part2 <$> input
 
 part2Alternative input = result
   where copies = repeat 1
-        addCopies 0 _ rest = rest
-        addCopies i m (n : rest) = (m+n) : addCopies (i-1) m rest
+        addCopies i m ns = (map (m+) pre) ++ post
+          where (pre, post) = splitAt i ns
         game (n : copies, acc) card = (addCopies m n copies, acc+n)
           where m = matches card
         (_, result) = foldl game (copies, 0) input
