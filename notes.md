@@ -53,3 +53,20 @@ parameter).
 Added an alternative version made with `foldl`, it's not as bad I
 thought it would be. Also ported the solution to F#.
 
+
+Day 5: If You Give A Seed A Fertilizer
+--------------------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting
+
+**Thoughts on the puzzle:** Nice puzzle. Used far too much time
+getting the interval logic right. I'm fairly sure it can be done more
+elegant than the code I ended up with.
+
+Rather than tracing the seed ranges through the mappings I would have
+liked to compose the mappings (as they are piecewise linear functions)
+alas I couldn't get it to work. However, I'm not sure it would have
+helped in the end (actually, I made a back-of-the-envelope estimate
+that suggested that it wouldn't have helped).
