@@ -70,3 +70,13 @@ liked to compose the mappings (as they are piecewise linear functions)
 alas I couldn't get it to work. However, I'm not sure it would have
 helped in the end (actually, I made a back-of-the-envelope estimate
 that suggested that it wouldn't have helped).
+
+
+Day 6: Wait For It
+------------------
+
+**Language used:** Rust
+
+**Parsing strategy:** String splitting
+
+**Thoughts on the puzzle:** Brute force worked :broken_heart:
