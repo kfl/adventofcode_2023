@@ -1,6 +1,16 @@
 use std::fs::File;
 use std::io::{self, BufRead, Error};
 
+fn read_lines(filename: &str) -> io::Result<impl Iterator<Item = String>> {
+    let file = File::open(filename)?;
+    let reader = io::BufReader::new(file);
+    let lines = reader.lines().map(|line| line.expect("Could not read lines"));
+
+    Ok(lines)
+}
+
+type Part1Input = (Vec<i64>, Vec<i64>);
+
 fn parse_nums(line: &str) -> Option<Vec<i64>> {
     line.split_once(':')
         .map(|(_label, nums)| {
@@ -10,11 +20,9 @@ fn parse_nums(line: &str) -> Option<Vec<i64>> {
         })
 }
 
-type Input = (Vec<i64>, Vec<i64>);
-
-fn parse_part1(mut source: impl Iterator<Item = String>) -> Option<Input> {
-    let times = parse_nums(&source.next()?)?;
-    let distances = parse_nums(&source.next()?)?;
+fn parse_part1(source: &[String]) -> Option<Part1Input> {
+    let times = parse_nums(&source[0])?;
+    let distances = parse_nums(&source[1])?;
     Some((times, distances))
 }
 
@@ -32,16 +40,16 @@ fn part1(times: Vec<i64>, distances: Vec<i64>) -> usize {
 
 fn parse_num(line: &str) -> Option<i64> {
     line.split_once(':')
-        .map(|(_label, nums)| {
+        .and_then(|(_label, nums)| {
             nums.split_whitespace()
                 .collect::<String>()
                 .parse().ok()
-        }).flatten()
+        })
 }
 
-fn parse_part2(mut source: impl Iterator<Item = String>) -> Option<(i64, i64)> {
-    let time = parse_num(&source.next()?)?;
-    let distance = parse_num(&source.next()?)?;
+fn parse_part2(source:  &[String]) -> Option<(i64, i64)> {
+    let time = parse_num(&source[0])?;
+    let distance = parse_num(&source[1])?;
     Some((time, distance))
 }
 
@@ -49,23 +57,12 @@ fn part2(time: i64, distance: i64) -> usize {
     race(time, distance)
 }
 
-macro_rules! do_part {
-    ($parse:ident, $part:ident) => {
-        {
-            let file = File::open("input.txt")?;
-            let reader = io::BufReader::new(file);
-            let lines = reader.lines().map(|l| l.unwrap());
-
-            let (times, distances) =
-                $parse(lines).ok_or(Error::other(format!("{}: error", stringify!($parse))))?;
-            println!("{}: {}", stringify!($part), $part(times, distances));
-        }
-    };
-}
-
 fn main() -> io::Result<()> {
-    do_part!(parse_part1, part1);
-    do_part!(parse_part2, part2);
+    let lines : Vec<_> = read_lines("input.txt")?.collect();
+    let (times, distances) = parse_part1(&lines).ok_or(Error::other("Part 2 parse error"))?;
+    println!("Part 1: {}", part1(times, distances));
+    let (time, distance) = parse_part2(&lines).ok_or(Error::other("Part 2 parse error"))?;
+    println!("Part 2: {}", part2(time, distance));
     Ok(())
 }
 
@@ -82,26 +79,24 @@ mod tests {
     #[test]
     fn test_parse_part1() {
         let expected_result = Some((vec![7, 15, 30], vec![9, 40, 200]));
-        assert_eq!(parse_part1(test_data().into_iter()), expected_result);
+        assert_eq!(parse_part1(&test_data()), expected_result);
     }
 
     #[test]
     fn test_part1() {
-        if let Some((times, distances)) = parse_part1(test_data().into_iter()) {
-            assert_eq!(part1(times, distances), 288);
-        }
+        let (times, distances) = parse_part1(&test_data()).expect("parse error");
+        assert_eq!(part1(times, distances), 288);
     }
 
     #[test]
     fn test_parse_part2() {
         let expected_result = Some((71530, 940200));
-        assert_eq!(parse_part2(test_data().into_iter()), expected_result);
+        assert_eq!(parse_part2(&test_data()), expected_result);
     }
 
     #[test]
     fn test_part2() {
-        if let Some((times, distances)) = parse_part2(test_data().into_iter()) {
-            assert_eq!(part2(times, distances), 71503);
-        }
+        let (time, distance) = parse_part2(&test_data()).expect("parse error");
+        assert_eq!(part2(time, distance), 71503);
     }
 }
