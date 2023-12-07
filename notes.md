@@ -80,3 +80,14 @@ Day 6: Wait For It
 **Parsing strategy:** String splitting
 
 **Thoughts on the puzzle:** Brute force worked :broken_heart:
+
+
+Day 7: Camel Cards
+------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting (barely)
+
+**Thoughts on the puzzle:** Brute force worked again for finding the
+best possible replacement for jokers.
