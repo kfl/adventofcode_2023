@@ -1,4 +1,4 @@
-{-# LANGUAGE Strict #-}
+{-# LANGUAGE LambdaCase, Strict #-}
 module Main where
 
 import qualified Data.Char as C
@@ -6,6 +6,7 @@ import qualified Data.List as L
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map, (!))
 import Data.Bifunctor (first)
+import Data.Tuple (swap)
 
 test =  map parse [ "32T3K 765"
                   , "T55J5 684"
@@ -65,6 +66,14 @@ bestPossibleType vals = typ $ maximum replaced
                    | i <- [2..14], i /= 11,
                      let vals' = map (\c -> if c == 1 then i else c) vals
                    ]
+
+bestPossibleTypeAlternative vals = eval replaced
+  where
+    -- find the most common, highest valued card, that is not a joker
+    (jokers, rest) = L.partition (== 1) vals
+    freqs = map swap $ Map.assocs $ freqMap rest
+    replacement = if null rest then 14 else snd $ maximum freqs
+    replaced = map (\case 1 -> replacement ; c -> c) vals
 
 cardsToHand2 cards = Hand cards vals typ
   where vals = map value2 cards

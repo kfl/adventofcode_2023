@@ -89,5 +89,7 @@ Day 7: Camel Cards
 
 **Parsing strategy:** String splitting (barely)
 
-**Thoughts on the puzzle:** Brute force worked again for finding the
-best possible replacement for jokers.
+**Thoughts on the puzzle:** Brute force worked again, this time for
+finding the best possible replacement for jokers.
+
+Added an alternative to brute force for finding the best replacement.
