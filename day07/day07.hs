@@ -5,9 +5,7 @@ import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map, (!))
-import Data.Bifunctor (first, second, bimap)
-import Data.Tuple (swap)
-import Data.Maybe (fromJust)
+import Data.Bifunctor (first)
 
 test =  map parse [ "32T3K 765"
                   , "T55J5 684"
