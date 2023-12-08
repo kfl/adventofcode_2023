@@ -93,3 +93,29 @@ Day 7: Camel Cards
 finding the best possible replacement for jokers.
 
 Added an alternative to brute force for finding the best replacement.
+
+
+Day 8: Haunted Wasteland
+------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting
+
+**Thoughts on the puzzle:** Part 1 was a straightforward automaton
+run. Part 2 was a bit more interesting, since brute-force worked the
+last two days, I expected it to **not** work today. I started by
+implementing the general solution where you kept track of all states
+at the same time. While that was running, I thought about making
+simplifying assumptions. One is that once a ghost hits an end-node it
+enters a cycle, of the same or shorter length than it took to arrive
+at the end-node, it least that was the case for the given test
+example. Thus you just have to find the least common multiplier for
+all cycle-length. I implemented that and to found a working solution
+instantly (while the general brute force solution was still
+working). However, I find it an unsatisfying solution. Because it is
+possible to construct networks where this solution does not work. I
+guess the proper general solution is to view the network as multiple
+[Büchi automata](https://en.wikipedia.org/wiki/B%C3%BCchi_automaton)
+and then find cycle length in their composed language or something
+like that, or at least check that the simplifying assumption holds.
