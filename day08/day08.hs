@@ -56,7 +56,7 @@ test2 = parse $ unlines [ "LR"
                         ]
 
 part2 :: Input -> Int
-part2 (instrs, net) = leastCommonMultiplier
+part2 (instrs, net) = leastCommonMultiple
   where
     startNodes = filter ("A" `L.isSuffixOf`) $ Map.keys net
     endNodes = Set.filter ("Z" `L.isSuffixOf`) $ Map.keysSet net
@@ -65,7 +65,7 @@ part2 (instrs, net) = leastCommonMultiplier
 
     -- Assumption: once you hit an end-node, then you enter a cycle
     cycleLengths = map (fromJust . L.findIndex (`Set.member` endNodes)) runs
-    leastCommonMultiplier = foldr1 lcm cycleLengths
+    leastCommonMultiple = foldr1 lcm cycleLengths
 
 answer2 = part2 <$> input
 
