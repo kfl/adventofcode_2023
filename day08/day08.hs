@@ -8,6 +8,8 @@ import Data.Map.Strict (Map, (!))
 import Data.Maybe (fromJust)
 import qualified Data.Set as Set
 
+import System.Process (callCommand)
+
 type Instruction = Char -- 'L' or 'R'
 type Node = String
 type Network = Map Node (Node, Node)
@@ -66,6 +68,14 @@ part2 (instrs, net) = leastCommonMultiplier
     leastCommonMultiplier = foldr1 lcm cycleLengths
 
 answer2 = part2 <$> input
+
+showNetwork = do
+  (_, net) <- input
+  let trans = map (\(n, (n1, n2)) -> concat[n, " -> ", n1, ";\n",
+                                            n, " -> ", n2, ";\n"]) $ Map.assocs net
+  writeFile "input.dot" $ concat $ "digraph network { \n" : trans ++ ["}\n"]
+  callCommand "neato -Tpdf input.dot -o input.pdf"
+  callCommand "open -a Preview input.pdf"
 
 main = do
   inp <- input
