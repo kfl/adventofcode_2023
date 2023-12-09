@@ -130,3 +130,5 @@ Day 9: Mirage Maintenance
 
 **Thoughts on the puzzle:** No twists. Got to exercise the standard
 list functions.
+
+Added a Rust version to exercise some iterators.
