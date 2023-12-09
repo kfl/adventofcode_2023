@@ -119,3 +119,14 @@ guess the proper general solution is to view the network as multiple
 [Büchi automata](https://en.wikipedia.org/wiki/B%C3%BCchi_automaton)
 and then find cycle length in their composed language or something
 like that, or at least check that the simplifying assumption holds.
+
+
+Day 9: Mirage Maintenance
+-------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting (barely)
+
+**Thoughts on the puzzle:** No twists. Got to exercise the standard
+list functions.
