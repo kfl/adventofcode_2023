@@ -1,5 +1,5 @@
 {-# LANGUAGE Strict #-}
-{-# OPTIONS_GHC -Wno-x-partial #-} -- I'm using `head` and that's OK
+{-# OPTIONS_GHC -Wno-x-partial #-} -- I'm using `head` and `tail`, I know what I'm doing
 module Main where
 
 test =  map parse [ "0 3 6 9 12 15"
@@ -13,8 +13,7 @@ type Input = [[Int]]
 parse :: String -> [Int]
 parse str = map read $ words str
 
-diffs xs = init ds
-  where (_, ds) = foldr (\prev (x, acc) -> (prev, (x - prev) : acc)) (0, []) xs
+diffs xs = zipWith (-) (tail xs) xs
 
 fullHistory xs = takeWhile (any (/= 0)) $ iterate diffs xs
 
