@@ -132,3 +132,21 @@ Day 9: Mirage Maintenance
 list functions.
 
 Added a Rust version to exercise some iterators.
+
+
+Day 10: Pipe Maze
+-----------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String and list manipulation. Builds a graph
+during parsing.
+
+**Thoughts on the puzzle:** Part 1 is straightforward path following
+and then counting the length of the path.
+
+Path 2 was more interesting. Made some visualisation functions to
+better understand. Was stuck until I realised that the problem is in
+essence a points inside polygon problem. Implemented a simple scan-line
+algorithm, but used far to long getting corner-points right (more than
+the allotted time-box).
