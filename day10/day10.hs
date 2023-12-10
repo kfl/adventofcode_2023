@@ -110,15 +110,15 @@ larger2 = parse [ "FF7FSF7F7F7F7F7F---7"
 
 visualise file start@(sr,sc) nodes edges = do
   let name t = show $ show t
-      node t@(r,c) = [name t, "[ pos = \"", show c, ",", show (- r), "!\"];\n"]
+      node t@(r,c) = [name t, "[ pos = \"", show $ 100 *c, ",", show (-100 * r), "\"];\n"]
       startNode = concat[name start,
-                         "[ pos = \"", show sc, ",", show (- sr), "!\", color=green];\n"]
+                         "[ pos = \"", show $ 100 *sc, ",", show (-100 * sr), "\", color=green];\n"]
       ns = startNode : map (concat . node) nodes
       es = map ((++";\n") . L.intercalate " -- ") $ L.divvy 2 1 $ map name edges
       dotfile = file ++ ".dot"
       pdffile = file ++ ".pdf"
-  writeFile dotfile $ concat $ "graph grid { " : ns ++ es ++ ["}\n"]
-  callCommand $ "neato -Tpdf "++dotfile++" -o "++pdffile
+  writeFile dotfile $ concat $ "graph grid { node [shape=point];\n" : ns ++ es ++ ["}\n"]
+  callCommand $ "neato -Tpdf -n "++dotfile++" -o "++pdffile
   callCommand $ "open -a Preview " ++ pdffile
 
 showTiles file (start, tiles) = do
