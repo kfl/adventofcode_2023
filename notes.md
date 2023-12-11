@@ -150,3 +150,19 @@ better understand. Was stuck until I realised that the problem is in
 essence a points inside polygon problem. Implemented a simple scan-line
 algorithm, but used far to long getting corner-points right (more than
 the allotted time-box).
+
+
+Day 11: Cosmic Expansion
+------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** List comprehension
+
+**Thoughts on the puzzle:** It's always a pleasure to work in [taxicap
+geometry](https://en.wikipedia.org/wiki/Taxicab_geometry). Could make
+my code shorter by refactor the more general solution for part 2 to
+solve part 1, but decided to leave the code as it was during the
+event. Likewise, the current implementation could be made more
+efficient (at least wrt big-O complexity) by using sets instead of
+lists, but it's fast enough to not bother.
