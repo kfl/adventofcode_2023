@@ -166,3 +166,21 @@ solve part 1, but decided to leave the code as it was during the
 event. Likewise, the current implementation could be made more
 efficient (at least wrt big-O complexity) by using sets instead of
 lists, but it's fast enough to not bother.
+
+
+Day 12: Hot Springs
+-------------------
+
+**Language used:** Haskell
+
+
+**Pre-coding thoughts on the puzzle:** This looks like the solution
+from day 4 can be used. But not entirely sure how to convert this days
+puzzle format into the format from day 4.
+
+**Thoughts on the puzzle:** Part 1 solved by recursively computing all
+possible arrangements. Part 2, Q: what do you do when have a recursive
+solution, but it is computing the same thing over and over? A: You
+slap some ugly memorisation on it. Part 2 is still too slow for my
+taste, however the current solution runs in about 5s, which is
+acceptable.
