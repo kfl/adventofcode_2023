@@ -56,19 +56,21 @@ enlarge factor input = map (\(co, ch) -> (L.intercalate "?" $ L.replicate factor
 
 count (cond, check) = (length $ filter (== '?') cond, length check)
 
-mpossible = Ugly.memo mpossible'
-mpossible' (0, [], [])           = 1
-mpossible' (x, [y], []) | x == y = 1
-mpossible' (x, y : check, '.' : rest) | x == y = mpossible (0, check, rest)
-mpossible' (0,     check, '.' : rest)          = mpossible (0, check, rest)
-mpossible' (x, y : check, '#' : rest) | x < y  = mpossible (x+1, y : check, rest)
-mpossible' (0,     check, '#' : rest)          = mpossible (1, check, rest)
-mpossible' (running, check, '?' : rest) =
-  mpossible (running, check, '.' : rest) + mpossible (running, check, '#' : rest)
-mpossible' (_, _, _) = 0
-
 part2 :: Input -> Int
-part2 input = sum $ map (\(condition, check) -> mpossible (0, check, condition)) $ enlarge 5 input
+part2 input = sum $ map mpossibleArrangements $ enlarge 5 input
+  where
+    mpossibleArrangements (condition, check) = mpossible (0, check, condition)
+      where
+        mpossible = Ugly.memo mpossible'
+        mpossible' (0, [], [])           = 1
+        mpossible' (x, [y], []) | x == y = 1
+        mpossible' (x, y : check, '.' : rest) | x == y = mpossible' (0, check, rest)
+        mpossible' (0,     check, '.' : rest)          = mpossible' (0, check, rest)
+        mpossible' (x, y : check, '#' : rest) | x < y  = mpossible' (x+1, y : check, rest)
+        mpossible' (0,     check, '#' : rest)          = mpossible' (1, check, rest)
+        mpossible' (running, check, '?' : rest) =
+          mpossible (running, check, '.' : rest) + mpossible (running, check, '#' : rest)
+        mpossible' (_, _, _) = 0
 
 answer2 = part2 <$> input
 

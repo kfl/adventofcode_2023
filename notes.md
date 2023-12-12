@@ -181,6 +181,10 @@ puzzle format into the format from day 4.
 **Thoughts on the puzzle:** Part 1 solved by recursively computing all
 possible arrangements. Part 2, Q: what do you do when have a recursive
 solution, but it is computing the same thing over and over? A: You
-slap some ugly memorisation on it. Part 2 is still too slow for my
-taste, however the current solution runs in about 5s, which is
-acceptable.
+slap some ugly memorisation on it.
+
+Part 2 is still too slow for my taste, however the current solution
+runs in well under 5s which is acceptable. To get real speedups from
+here we need either a better data structure where we divide the
+condition and checksum into independent groups that can solved
+individually, and possibly also use a more specialised memorisation.
