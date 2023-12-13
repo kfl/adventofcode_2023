@@ -173,6 +173,7 @@ Day 12: Hot Springs
 
 **Language used:** Haskell
 
+**Parsing strategy:** String splitting and `read` abuse
 
 **Pre-coding thoughts on the puzzle:** This looks like the solution
 from day 4 can be used. But not entirely sure how to convert this days
@@ -181,10 +182,31 @@ puzzle format into the format from day 4.
 **Thoughts on the puzzle:** Part 1 solved by recursively computing all
 possible arrangements. Part 2, Q: what do you do when have a recursive
 solution, but it is computing the same thing over and over? A: You
-slap some ugly memorisation on it.
+slap some ugly memoisation on it.
 
 Part 2 is still too slow for my taste, however the current solution
 runs in well under 5s which is acceptable. To get real speedups from
 here we need either a better data structure where we divide the
 condition and checksum into independent groups that can solved
 individually, and possibly also use a more specialised memorisation.
+
+**Maybe some day:** Instead of checking one element at a time and
+keeping track of a running sum, try to match as many `#` (and `?`) at
+a time as possible.
+
+
+Day 13: Point of Incidence
+--------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting and List comprehension
+
+**Thoughts on the puzzle:** Decided to use bit-vectors for keeping
+track of rocks. Partly because I wanted to exercise using bit-vectors
+and partly because I had an inkling that it would come use for part 2,
+and it did :smile: Given the size of the sets, I don't think it would
+have mattered much if I had used another set representation neither
+performance-wise nor code elegance/size. However there is something
+satisfying about using `xor` and `countBits` to find the number of
+differences between two sets.
