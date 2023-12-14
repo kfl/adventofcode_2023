@@ -210,3 +210,14 @@ have mattered much if I had used another set representation neither
 performance-wise nor code elegance/size. However there is something
 satisfying about using `xor` and `countBits` to find the number of
 differences between two sets.
+
+
+Day 14: Parabolic Reflector Dish
+--------------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** List comprehension.
+
+**Thoughts on the puzzle:** Less elegant choices where made with the
+data representation.
