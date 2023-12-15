@@ -16,9 +16,7 @@ type Input = [String]
 
 parse = L.splitOn ","
 
-aocHASH = loop 0
-  where loop curr [] = curr
-        loop curr (c : rest) = loop (((curr + C.ord c) * 17) `rem` 256) rest
+aocHASH = L.foldl' (\curr c -> ((curr + C.ord c) * 17) `rem` 256) 0
 
 part1 :: Input -> Int
 part1 input = sum $ map aocHASH input
