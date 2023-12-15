@@ -221,3 +221,16 @@ Day 14: Parabolic Reflector Dish
 
 **Thoughts on the puzzle:** Less elegant choices where made with the
 data representation.
+
+
+Day 15: Lens Library
+--------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting for both parts.
+
+**Thoughts on the puzzle:** Part 2 is fun. Implementing a small VM of
+sorts is always appreciated. Used to opportunity to play with
+Haskell's `vector` library. Liked that I was able to encapsulate the
+mutation of the box vector nicely.
