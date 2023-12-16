@@ -2,12 +2,15 @@
 module Main where
 
 import qualified Data.List as L
-import qualified Data.Map.Strict as Map
-import Data.Map.Strict (Map, (!))
-import qualified Data.Set as Set
-import Data.Set (Set)
+
+import qualified Data.HashMap.Strict as Map
+import Data.HashMap.Strict (HashMap)
+import Data.Hashable
+import qualified Data.HashSet as Set
 
 import Control.Monad.Par (runPar, parMap)
+
+type Map = HashMap
 
 test =  parse [ ".|...\\...."
               , "|.-.\\....."
@@ -25,18 +28,22 @@ input = parse . lines <$> readFile "input.txt"
 data Mirror = Hori | Vert | Forw | Back
   deriving (Eq, Show, Ord)
 
-type Input = (Int, Int, Map (Int, Int) Mirror)
+type Input = (Int, Int, Map (Int, Int) (Beam -> [Beam]))
 
 parse :: [String] -> Input
 parse rows@(cols: _) = (length cols, length rows,
-                        Map.fromList[ ((x,y), parseMirror m)
+                        Map.fromList[ ((x,y), reflect $ parseMirror m)
                                     | (y, row) <- zip [0..] rows
                                     , (x, m) <- zip [0..] row
                                     , m `elem` "|-/\\"])
   where parseMirror = \case '-' -> Hori ; '|' -> Vert; '/' -> Forw ; _ -> Back
 
 data Direction = North | South | East | West
-  deriving (Eq, Show, Ord)
+  deriving (Eq, Show, Ord, Enum)
+
+instance Hashable Direction where
+  hashWithSalt = hashUsing fromEnum
+  hash = fromEnum
 
 type Beam = (Int, Int, Direction)
 
@@ -63,13 +70,13 @@ continue = \case (x,y, North) -> [(x, y-1, North)]
                  (x,y, West)  -> [(x-1, y, West)]
                  (x,y, East)  -> [(x+1, y, East)]
 
-unionsMap f = Set.unions . Set.map f
+unionsMap f = Set.fromList . concatMap f . Set.toList
 
 step (nr, nc, mirrors) (beams, energized) = (beams', Set.union beams' energized)
   where
-    beams' = unionsMap next beams Set.\\ energized
-    next b@(x,y,_) = Set.fromList $ filter inBounds bs
-      where bs = (maybe continue reflect $ Map.lookup (x,y) mirrors) b
+    beams' = unionsMap next beams
+    next b@(x,y,_) = filter (\b -> inBounds b && not (Set.member b energized)) bs
+      where bs = Map.findWithDefault continue (x,y) mirrors b
             inBounds (x,y,_) = 0 <= x && x < nc && 0 <= y && y < nr
 
 energized input start = Set.size $ Set.map (\(x,y,_) -> (x,y)) energized

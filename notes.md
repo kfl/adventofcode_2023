@@ -246,5 +246,7 @@ Day 16: The Floor Will Be Lava
 **Thoughts on the puzzle:** Made a straightforward implementation with
 no smarts aside from using maps and sets, it worked. It was a bit
 slow, so I used parallelism to speed it up and the running time
-dropped below 1s. A more elegant solution to improve the running time
-would be to use memoisation across the different start positions.
+dropped below 1s. Another performance improvement is to use s set
+implementation based on hashing instead of search trees. A more
+elegant solution to improve the running time would be to use
+memoisation across the different start position, didn't do that.
