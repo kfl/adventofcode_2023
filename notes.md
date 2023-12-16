@@ -188,7 +188,7 @@ Part 2 is still too slow for my taste, however the current solution
 runs in well under 5s which is acceptable. To get real speedups from
 here we need either a better data structure where we divide the
 condition and checksum into independent groups that can solved
-individually, and possibly also use a more specialised memorisation.
+individually, and possibly also use a more specialised memoisation.
 
 **Maybe some day:** Instead of checking one element at a time and
 keeping track of a running sum, try to match as many `#` (and `?`) at
@@ -234,3 +234,17 @@ Day 15: Lens Library
 sorts is always appreciated. Used to opportunity to play with
 Haskell's `vector` library. Liked that I was able to encapsulate the
 mutation of the box vector nicely.
+
+
+Day 16: The Floor Will Be Lava
+------------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** List comprehension.
+
+**Thoughts on the puzzle:** Made a straightforward implementation with
+no smarts aside from using maps and sets, it worked. It was a bit
+slow, so I used parallelism to speed it up and the running time
+dropped below 1s. A more elegant solution to improve the running time
+would be to use memoisation across the different start positions.
