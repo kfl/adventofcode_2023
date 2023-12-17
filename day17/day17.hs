@@ -94,8 +94,8 @@ dijkstra next found initial = loop initPathCost startFrontier
         relevant = [ (n, cc) | (n, sc) <- next s,
                                let cc = c + sc,
                                cc `less` (pathCost !? n) ]
-        frontier' = L.foldr (\(n, cc) front -> update n cc front) frontier relevant
-        pathCost' = Map.fromList relevant `Map.union` pathCost
+        (frontier', pathCost') = L.foldr updateBoth (frontier, pathCost) relevant
+        updateBoth (n, cc) (front, pathC) = (update n cc front, Map.insert n cc pathC)
 
 
 coolestPath grid start goal = fromMaybe (error "dijkstra couldn't find a path") $

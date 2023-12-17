@@ -26,4 +26,5 @@ executable day17
     hs-source-dirs:   .
     default-language: GHC2021
     ghc-options:      -O2
+    -- -prof -fprof-late -rtsopts
     -- -threaded -rtsopts -with-rtsopts=-N
