@@ -250,3 +250,22 @@ dropped below 1s. Another performance improvement is to use s set
 implementation based on hashing instead of search trees. A more
 elegant solution to improve the running time would be to use
 memoisation across the different start position, didn't do that.
+
+
+Day 17: Clumsy Crucible
+-----------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** List comprehension to array construction.
+
+**Thoughts on the puzzle:** Both parts was path finding problems. In
+both path the interesting feature is that the graph is context
+dependant, thus it best to unfold the graph dynamically when
+traversing it. I implemented my own Dijkstra's shortest path
+algorithm, my implementation is four times faster than the one from
+the `search-algorithms` package. I compared `dijkstraAssoc` and
+`aStarAssoc` to see if it would be worth to implement the A*
+algorithm, but without a better heuristic than Manhattan distance,
+it's not an improvement to use A*.
+
