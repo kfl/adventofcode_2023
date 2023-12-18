@@ -269,3 +269,17 @@ the `search-algorithms` package. I compared `dijkstraAssoc` and
 algorithm, but without a better heuristic than Manhattan distance,
 it's not an improvement to use A*.
 
+
+Day 18: Lavaduct Lagoon
+-----------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting and a hand-written hex parser
+
+**Thoughts on the puzzle:** Both parts was about finding the area of a
+polygon given as a sequence of points. Good that we where introduced
+to the same problem earlier this year (on day 10). Back then I didn't
+get to use the [Shoelace
+formula](https://en.wikipedia.org/wiki/Shoelace_formula) (found out
+too late), worked like a charm for today's problem.
