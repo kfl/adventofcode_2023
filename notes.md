@@ -269,6 +269,9 @@ the `search-algorithms` package. I compared `dijkstraAssoc` and
 algorithm, but without a better heuristic than Manhattan distance,
 it's not an improvement to use A*.
 
+Added an alternative way to compute the states of the search space,
+this brings the time below 1s.
+
 
 Day 18: Lavaduct Lagoon
 -----------------------
