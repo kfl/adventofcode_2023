@@ -286,3 +286,21 @@ to the same problem earlier this year (on day 10). Back then I didn't
 get to use the [Shoelace
 formula](https://en.wikipedia.org/wiki/Shoelace_formula) (found out
 too late), worked like a charm for today's problem.
+
+
+Day 19: Aplenty
+---------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting and `read` abuse
+
+**Thoughts on the puzzle:** Good puzzle, but I think I over-engineered
+my solution a bit. Both parts was fast an correct on first
+run. "Wasted" time making a graph visualiser, to determine if I had to
+worry about loops. Alas, I couldn't determine if there was any
+loops. However, it looked there might be many shared paths. Hence, I
+concluded that I better use some memoisation from the get go (the
+`seen` argument in `loop`). I also ended up making my own faux lenses
+library (the `view` and `over` functions), even though I'm not a fan
+on lenses.
