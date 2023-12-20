@@ -329,4 +329,7 @@ solution requires more than 100M steps. A quick inspection of the
 input (I hate when that's necessary) reveals that my `rx` module is
 the destination for a single conjunction module, which in turn is the
 single destination for four other conjunction modules. Thus, my guess
-is that we figure out some gear solution like on day 8.
+is that we figure out some gear solution like on day 8. I don't have
+the energy for completing this during event time.
+
+Next step: make a visualiser to see if some pattern appears.
