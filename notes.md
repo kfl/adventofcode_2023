@@ -304,3 +304,29 @@ concluded that I better use some memoisation from the get go (the
 `seen` argument in `loop`). I also ended up making my own faux lenses
 library (the `view` and `over` functions), even though I'm not a fan
 on lenses.
+
+
+Day 20: Pulse Propagation
+-------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:**
+
+**Pre-coding analysis:** A *module* consists of: some mutable memory,
+an immutable *transfer function*. A transfer function takes two
+arguments the memory and an a pulse, and returns the new memory and a
+sequence of pulses. A pulse consists of a sender module, a value
+(`low` or `high`) and a destination module. There are three kinds of
+transfer functions: `Flip-flop`, `Conjunction` and `Special`.
+
+Hunch: I'm guessing that we'll be doing cycle detection in part 2, as
+the button pushing seem suitable for caching.
+
+**Thoughts on the puzzle:** Only completed part 1 during the event. It
+seems that we must do some kind of cycle detection for part 2. Because the
+solution requires more than 100M steps. A quick inspection of the
+input (I hate when that's necessary) reveals that my `rx` module is
+the destination for a single conjunction module, which in turn is the
+single destination for four other conjunction modules. Thus, my guess
+is that we figure out some gear solution like on day 8.
