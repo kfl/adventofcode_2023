@@ -1,5 +1,4 @@
-{-# LANGUAGE ViewPatterns #-}
-{-# LANGUAGE LambdaCase, Strict, OverloadedLists #-}
+{-# LANGUAGE Strict, OverloadedLists #-}
 module Main where
 
 import qualified Data.Char as C
@@ -47,7 +46,7 @@ parse rows@(cols : _) = (Set.fromList rocks, start, length cols, length rows)
 neighbours (i, j) = [ (i-1, j), (i+1, j), (i, j-1), (i, j+1) ]
 
 step rocks possible = Set.difference (Set.unions $ map move $ Set.toList possible) rocks
-  where move pos = Set.fromList [ n | n <- neighbours pos]
+  where move pos = Set.fromList $ neighbours pos
 
 
 part1 :: Input -> Int
