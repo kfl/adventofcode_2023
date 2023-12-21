@@ -333,3 +333,19 @@ is that we figure out some gear solution like on day 8. I don't have
 the energy for completing this during event time.
 
 Next step: make a visualiser to see if some pattern appears.
+
+
+Day 21: Step Counter
+--------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting
+
+**Thoughts on the puzzle:** Only completed part 1 during the event. It
+is obvious that brute force isn't going to work (I had it running for
+~8h). I tried to use the method from day 9 to predict the value, it
+seems that there must be some for sort of recurrence, as (1) the
+starting position is right in the middle of the map, and (2) there are
+"corridors" straight from the starting position to the edges in both
+axis. Alas, I couldn't get it to work.
