@@ -340,7 +340,7 @@ Day 21: Step Counter
 
 **Language used:** Haskell
 
-**Parsing strategy:** String splitting
+**Parsing strategy:** List comprehensions.
 
 **Thoughts on the puzzle:** Only completed part 1 during the event. It
 is obvious that brute force isn't going to work (I had it running for
