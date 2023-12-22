@@ -349,3 +349,13 @@ seems that there must be some for sort of recurrence, as (1) the
 starting position is right in the middle of the map, and (2) there are
 "corridors" straight from the starting position to the edges in both
 axis. Alas, I couldn't get it to work.
+
+
+Day 22: Sand Slabs
+------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** List comprehensions.
+
+**Thoughts on the puzzle:** Not completed during the event.
