@@ -22,6 +22,8 @@ test =  map parse [ "1,0,1~1,2,1"
                   , "2,0,5~2,2,5"
                   , "0,1,6~2,1,6"
                   , "1,1,8~1,1,9"
+                  , "1,1,11~1,1,12"  -- Extra brick for debugging
+                  , "1,0,15~1,0,16"  -- Extra brick for debugging
                   ]
 input = map parse . lines <$> readFile "input.txt"
 
@@ -39,7 +41,7 @@ data Cuboid = C { x, y, z, w, h, d :: Int }
   deriving (Eq, Ord)
 
 instance Show Cuboid where
-    show (C x y z w h d) = printf "(C %d %d %d %d %d %d)" x y z w h d
+    show (C x y z w h d) = printf "(C %d %d %d %d %d %d)\n" x y z w h d
 
 
 brickToCuboid :: Brick -> Cuboid
@@ -62,7 +64,7 @@ downFall cuboids = L.foldl' oneFall [] $ L.sortOn z cuboids
 
 
 --part1 :: Input -> Int
-part1 input = Set.size safe --length cuboids - Set.size essentials
+part1 input = length cuboids - Set.size essentials
   where
     cuboids = downFall $ map brickToCuboid input
     zmap = Map.fromListWith (++) [ (top, [c]) | c@C{z, d} <- cuboids, let top = z+d ]
@@ -74,6 +76,8 @@ part1 input = Set.size safe --length cuboids - Set.size essentials
     cset = Set.fromList cuboids
     safe = Set.difference cset essentials
     freeloaders = Set.difference cset $ Set.fromList $ concat $ Map.elems supporters
+    -- FIXME: For future debugging this invariant does not hold: length input == Set.size cset
+    --        There is properly a bug in downFall
 
 answer1 = part1 <$> input
 
