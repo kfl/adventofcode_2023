@@ -359,3 +359,22 @@ Day 22: Sand Slabs
 **Parsing strategy:** List comprehensions.
 
 **Thoughts on the puzzle:** Not completed during the event.
+
+
+Day 23: A Long Walk
+-------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** List comprehensions and char matching.
+
+**Thoughts on the puzzle:** Graph traversal. In part 2 made two
+optimisations (1) simplify the graph so that we don't have to
+traverse long corridors, but can skip to the action, and (2) instead
+of constructing all the paths, I just keep track of the maximum
+length.
+
+The `longestPath` function is still slower than what I would
+like. I think that the `visited` argument could/should be converted to
+a memoisation map, instead of just keeping track of which positions
+have been visited.
