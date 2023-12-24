@@ -378,3 +378,24 @@ The `longestPath` function is still slower than what I would
 like. I think that the `visited` argument could/should be converted to
 a memoisation map, instead of just keeping track of which positions
 have been visited.
+
+
+Day 24: Never Tell Me The Odds
+------------------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting
+
+**Thoughts on the puzzle:** Today was all about using large rational
+numbers (for me at least). The code for part 1 is rather messy. High
+school maths is several decades away, and it shows. In AoC 2021 I use
+[`SBV`](https://leventerkok.github.io/sbv/) and since part 2 seems to
+match what `SBV` can handle, I decided to use that again. It worked
+like a charm. The main downside was that at the time of the event,
+`SBV` didn't support my default `ghc`, so I had to set which `ghc` to
+use in my `cabal.project` file. When using an SMT solver it helps to
+know that it much faster to solve equations in ℚ rather than ℤ and
+then check if the solution is an integer solution, in this case it is
+(for me at least). Looking at the constrains, we could probably have
+done it with simple matrix manipulation.
