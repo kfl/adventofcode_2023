@@ -15,9 +15,10 @@ executable day25
     build-depends:    base >= 4 && < 5,
                       containers,
                       process >= 1.6.18.0,
-                      split,
-                      transformers >= 0.6.1.0,
-                      pretty-simple
+                      pretty-simple,
+                      search-algorithms,
+                      vector,
+
 
     hs-source-dirs:   .
     default-language: GHC2021
