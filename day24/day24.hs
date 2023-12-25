@@ -29,19 +29,19 @@ parse str = (trip position, trip velocity)
   where (position, _: velocity) = break (== '@') str
         trip s = read $ "("++s++")"
 
-type Line = (Q.Ratio Integer, Q.Ratio Integer)
+type Line = (Q.Rational, Q.Rational)
 
 toLine :: Hailstone -> Line
 toLine ((x,y,_), (xv,yv,_)) = (slope, c)
   where slope = yv % xv
         c = (y%1) - slope * (x%1)
 
-lineIntersection :: Line -> Line -> Maybe (Q.Ratio Integer, Q.Ratio Integer)
+lineIntersection :: Line -> Line -> Maybe (Q.Rational, Q.Rational)
 lineIntersection (slope1, c1) (slope2, c2)
   | slope1 == slope2 = Nothing
   | otherwise = let x = (c2 - c1) / (slope1 - slope2) in pure (x, slope1 * x + c1)
 
-intersection :: Hailstone -> Hailstone -> Maybe (Q.Ratio Integer, Q.Ratio Integer)
+intersection :: Hailstone -> Hailstone -> Maybe (Q.Rational, Q.Rational)
 intersection h1@((x1, _, _), (xv1, _, _)) h2@((x2, _, _), (xv2, _, _)) =
   case lineIntersection (toLine h1) (toLine h2) of
     Just p@(px, _) | signumMatch xv1 x1 px && signumMatch xv2 x2 px -> Just p
