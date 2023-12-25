@@ -399,3 +399,17 @@ know that it much faster to solve equations in ℚ rather than ℤ and
 then check if the solution is an integer solution, in this case it is
 (for me at least). Looking at the constrains, we could probably have
 done it with simple matrix manipulation.
+
+
+Day 25: Snowverload
+-------------------
+
+**Language used:** Haskell
+
+**Parsing strategy:** String splitting
+
+**Thoughts on the puzzle:** During the event I got the star by
+cheesing the solution by reading the three edges to remove out of an
+visualisation. Should probably implement something like ["A simple
+3-edge connected component algorithm
+revisited"](https://doi.org/10.1016/j.ipl.2013.09.010)
