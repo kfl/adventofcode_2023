@@ -334,6 +334,18 @@ the energy for completing this during event time.
 
 Next step: make a visualiser to see if some pattern appears.
 
+**Dec 26 solution:** The input to `rx` needs to send a single low
+pulse. Since the input to `rx` is a conjunction, it mean that all its
+input need to be high a the same time. A manual translation of the
+input to dot (via emacs), reveals that there is indeed some circular
+structure going on with the input to the conjunction before
+`rx`. Rewrote the horrible imperative mess I made for part 1, and
+instead made a function that generated the infinite list of pulses if
+you keep pressing the button. Then I search in the list of pulses for
+when each gear sends a high pulse to the gatekeeper (the conjunction
+before `rx`). After that I use LCM like on day 8.
+
+
 
 Day 21: Step Counter
 --------------------
