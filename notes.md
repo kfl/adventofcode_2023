@@ -350,6 +350,14 @@ starting position is right in the middle of the map, and (2) there are
 "corridors" straight from the starting position to the edges in both
 axis. Alas, I couldn't get it to work.
 
+Tried to optimise my solution some more. Alas, I could get the
+prediction to work and it is also doing far to much
+re-computation. Broke down and checked
+[r/adventofcode](https://www.reddit.com/r/adventofcode) for what
+others have done. Stole the idea of fitting a 2nd degree
+polynomial. It worked.
+
+
 
 Day 22: Sand Slabs
 ------------------
