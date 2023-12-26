@@ -358,7 +358,13 @@ Day 22: Sand Slabs
 
 **Parsing strategy:** List comprehensions.
 
-**Thoughts on the puzzle:** Not completed during the event.
+**Thoughts on the puzzle:** Not completed during the day event.
+
+Complete within the event time frame (but three days late). When
+brick/cuboids are falling I build two maps a height map and map of
+supporting cuboids (`supporters`). The `supporters` map is used to
+find essential cuboids (single supporters) in part 1, and used for
+computing chain reactions in part 2. 
 
 
 Day 23: A Long Walk

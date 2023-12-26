@@ -14,6 +14,7 @@ executable day22
 
     build-depends:    base >= 4 && < 5,
                       containers,
+                      mtl >= 2.3.1,
                       process >= 1.6.18.0,
                       split
 
