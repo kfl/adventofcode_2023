@@ -194,6 +194,14 @@ individually, and possibly also use a more specialised memoisation.
 keeping track of a running sum, try to match as many `#` (and `?`) at
 a time as possible.
 
+**Some day was Dec 28, 2023:** Rewrote part to use slightly less ugly
+memoisation, which in turn made it possible to take advantage of the
+embarrassingly parallel opportunity to check all rows. Also,
+simplified the `mpossible` function so that it only takes two
+arguments instead of three (which also helps the memoisation), and
+resolve the `?`'s that we know must be `#`'s before making recursive
+calls. Final running time is well below 0.5s.
+
 
 Day 13: Point of Incidence
 --------------------------

@@ -1,9 +1,14 @@
-{-# LANGUAGE Strict #-}
+{-# LANGUAGE Strict, OverloadedLists #-}
 module Main where
 
 import qualified Data.List as L
 import qualified Data.List.Split as L
-import qualified Data.MemoUgly as Ugly
+
+import Control.Monad.Memo qualified as Memo
+import Data.Vector.Unboxed qualified as U
+import qualified Data.Map.Strict as Map
+import Data.Map.Strict (Map, (!))
+import Control.Monad.Par (runPar, parMap)
 
 
 test =  map parse [ "???.### 1,1,3"
@@ -51,26 +56,29 @@ part1 :: Input -> Int
 part1 input = sum $ map possibleArrangements input
 answer1 = part1 <$> input
 
-enlarge factor input = map (\(co, ch) -> (L.intercalate "?" $ L.replicate factor co,
-                                          concat $ L.replicate factor ch)) input
+enlarge factor = map (\(co, ch) -> (L.intercalate "?" $ L.replicate factor co,
+                                    concat $ L.replicate factor ch))
 
 count (cond, check) = (length $ filter (== '?') cond, length check)
 
 part2 :: Input -> Int
-part2 input = sum $ map mpossibleArrangements $ enlarge 5 input
+part2 input = sum $ runPar $ parMap arrangements large
   where
-    mpossibleArrangements (condition, check) = mpossible (0, check, condition)
-      where
-        mpossible = Ugly.memo mpossible'
-        mpossible' (0, [], [])           = 1
-        mpossible' (x, [y], []) | x == y = 1
-        mpossible' (x, y : check, '.' : rest) | x == y = mpossible' (0, check, rest)
-        mpossible' (0,     check, '.' : rest)          = mpossible' (0, check, rest)
-        mpossible' (x, y : check, '#' : rest) | x < y  = mpossible' (x+1, y : check, rest)
-        mpossible' (0,     check, '#' : rest)          = mpossible' (1, check, rest)
-        mpossible' (running, check, '?' : rest) =
-          mpossible (running, check, '.' : rest) + mpossible (running, check, '#' : rest)
-        mpossible' (_, _, _) = 0
+    large = enlarge 5 input
+    arrangements (condition, check) = Memo.startEvalMemo $ mpossible (condition, U.fromList check)
+    mpossible = Memo.memo mpossible'
+    mpossible' (cs, ns)
+      | U.null ns, all (`elem` ".?") cs = pure 1
+      | U.null ns = pure 0
+      | null cs = pure 0
+      | '.' : cs <- cs = mpossible' (cs, ns)
+      | '#' : cs <- cs, Just (n, ns) <- U.uncons ns =
+          case splitAt (n-1) cs of
+            (a, c:b) | length a == n-1, all (`elem` "#?") a, c `elem` "?." -> mpossible' (b, ns)
+            (a, []) | length a == n-1, all (`elem` "#?") a -> mpossible' ([], ns)
+            _ -> pure 0
+      | '?' : cs <- cs = (+) <$> mpossible ('.' : cs, ns) <*> mpossible ('#' : cs, ns)
+
 
 answer2 = part2 <$> input
 
