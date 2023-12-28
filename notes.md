@@ -432,9 +432,10 @@ default `ghc`, so I had to set which `ghc` to use in my
 `cabal.project` file. When using an SMT solver it helps to know that
 it much faster to solve equations in ℝ (usually ℚ) rather than ℤ and
 then check if the found solution is an integer solution, in this case
-it is (for me at least). The reason is that is nonlinear integer
-arithmetic is *undecidable* (but still solvable in some cases), while
-nonlinear real arithmetic is *decidable* (proved by Tarski (1951)).
+it is (for me at least). The reason why this is faster, is that
+nonlinear integer arithmetic is *undecidable* (but still solvable in
+some cases), while nonlinear real arithmetic is *decidable* (proved by
+Tarski (1951)).
 
 Looking at the constrains, we could probably have done it with
 something less powerful than an SMT solver.
