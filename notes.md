@@ -455,5 +455,5 @@ visualisation. Should probably implement something like ["A simple
 revisited"](https://doi.org/10.1016/j.ipl.2013.09.010).
 
 Added a brute-force solution just for moral completeness. It currently
-uses 30m for finding the solution, and it doesn't work for the given
+uses ~5m for finding the solution, and it doesn't work for the given
 test case, so a papyrus victory.

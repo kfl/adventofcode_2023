@@ -103,31 +103,38 @@ allPairs keys = [ (k1, k2) | k1 : ks <- L.tails keys, k2 <- ks]
 pairUp (x:y:rest) = (x,y) : pairUp rest
 pairUp _ = []
 
-bridges conns' = Set.fromList $ map (Set.map retern . (`Set.elemAt` edges)) $ take 3 topEdges
+
+bridges conns' = Set.fromList $ map (Set.map retern . (`Set.elemAt` edges)) $ topEdges
   where internMap = Map.fromList $ zip (Map.keys conns') [0..]
         intern s = internMap ! s
         reternMap = Map.fromList $ map (\(x,y) -> (y,x)) $ Map.toList internMap
         retern i = reternMap ! i
 
-        conns :: Map Int [(Int, Int)]
-        conns = Map.fromList [ (intern n, map ((,1) . intern) $ Set.toList cs) |
+        conns :: Map Int [Int]
+        conns = Map.fromList [ (intern n, map intern $ Set.toList cs) |
                                (n, cs) <- Map.assocs conns']
-        edges = edgeSet $ Map.map (map fst) conns
+        edges = edgeSet conns
+
+        takeSome :: Ord k => Map k a -> [k]
+        takeSome m = take someAmount $ drop (n `div` 2 - someAmount) $ Map.keys m
+          where n = Map.size m
+                someAmount = n `div` 10
+        someElems = takeSome conns
 
         pairs = zip [0..] $ allPairs $ Map.keys conns
+        selection = [ p | p@(_, (src, dst)) <- pairs, src `elem` someElems || dst `elem` someElems]
         edgy (n1,n2) = Set.findIndex [n1,n2] edges
 
         next k = conns ! k
 
         loop :: U.Vector Int -> U.Vector Int
         loop = U.modify $ \counts -> do
-          forM_ pairs $ \(pi, (src, dst)) -> do
-            case AS.dijkstraAssoc next (== dst) src of
-              Just (_, path) -> forM_ (pairUp path) $ \ e -> do
+          forM_ selection $ \(pi, (src, dst)) -> do
+            case AS.bfs next (== dst) src of
+              Just path -> forM_ (pairUp path) $ \ e -> do
                 UM.modify counts (+1) $ edgy e
         edgeCount = loop $ U.replicate (Set.size edges) 0
-        topEdges = map fst $ L.sortOn (Down . snd) $ U.toList $ U.indexed edgeCount
-
+        topEdges = take 3 $ map fst $ L.sortOn (Down . snd) $ U.toList $ U.indexed edgeCount
 
 
 part1 :: Input -> Int
@@ -142,6 +149,6 @@ answer2 = part2 <$> input
 
 main = do
   inp <- input
-  print $ "Cheating solution: " ++ show (part1Cheese inp)
+  putStrLn $ "Cheating solution: " ++ show (part1Cheese inp)
   print $ part1 inp
-  print $ part2 inp
+  putStrLn $ part2 inp
