@@ -66,9 +66,9 @@ getting the interval logic right. I'm fairly sure it can be done more
 elegant than the code I ended up with.
 
 Rather than tracing the seed ranges through the mappings I would have
-liked to compose the mappings (as they are piecewise linear functions)
-alas I couldn't get it to work. However, I'm not sure it would have
-helped in the end (actually, I made a back-of-the-envelope estimate
+liked to compose the mappings (as they are piecewise linear functions).
+Alas, I couldn't get that to work. However, I'm not sure it would have
+helped in the end. (Well actually, I made a back-of-the-envelope estimate
 that suggested that it wouldn't have helped).
 
 
@@ -148,7 +148,7 @@ and then counting the length of the path.
 Path 2 was more interesting. Made some visualisation functions to
 better understand. Was stuck until I realised that the problem is in
 essence a points inside polygon problem. Implemented a simple scan-line
-algorithm, but used far to long getting corner-points right (more than
+algorithm, but used far too long time getting corner-points right (more than
 the allotted time-box).
 
 
@@ -261,9 +261,9 @@ Day 17: Clumsy Crucible
 
 **Thoughts on the puzzle:** Both parts was path finding problems. In
 both path the interesting feature is that the graph is context
-dependant, thus it best to unfold the graph dynamically when
+dependant, thus it's best to unfold the graph dynamically when
 traversing it. I implemented my own Dijkstra's shortest path
-algorithm, my implementation is four times faster than the one from
+algorithm. My implementation is four times faster than the one from
 the `search-algorithms` package. I compared `dijkstraAssoc` and
 `aStarAssoc` to see if it would be worth to implement the A*
 algorithm, but without a better heuristic than Manhattan distance,
@@ -335,7 +335,7 @@ the energy for completing this during event time.
 Next step: make a visualiser to see if some pattern appears.
 
 **Dec 26 solution:** The input to `rx` needs to send a single low
-pulse. Since the input to `rx` is a conjunction, it mean that all its
+pulse. Since the input to `rx` is a conjunction, it means that all its
 input need to be high a the same time. A manual translation of the
 input to dot (via emacs), reveals that there is indeed some circular
 structure going on with the input to the conjunction before
@@ -362,9 +362,10 @@ starting position is right in the middle of the map, and (2) there are
 "corridors" straight from the starting position to the edges in both
 axis. Alas, I couldn't get it to work.
 
-Tried to optimise my solution some more. Alas, I could get the
-prediction to work and it is also doing far to much
-re-computation. Broke down and checked
+Tried to optimise my solution some more. Alas, I couldn't get the
+prediction to work, and it is also doing far too much re-computation.
+
+Broke down and checked
 [r/adventofcode](https://www.reddit.com/r/adventofcode) for what
 others have done. Stole the idea of fitting a 2nd degree
 polynomial. It worked.
@@ -380,11 +381,12 @@ Day 22: Sand Slabs
 
 **Thoughts on the puzzle:** Not completed during the day event.
 
-Complete within the event time frame (but three days late). When
-brick/cuboids are falling I build two maps a height map and map of
-supporting cuboids (`supporters`). The `supporters` map is used to
+Complete within the event time frame (but three days late).
+
+When brick/cuboids are falling, I build two maps: a height map and map
+of supporting cuboids (`supporters`). The `supporters` map is used to
 find essential cuboids (single supporters) in part 1, and used for
-computing chain reactions in part 2. 
+computing chain reactions in part 2.
 
 
 Day 23: A Long Walk
@@ -394,11 +396,14 @@ Day 23: A Long Walk
 
 **Parsing strategy:** List comprehensions and char matching.
 
-**Thoughts on the puzzle:** Graph traversal. In part 2 made two
-optimisations (1) simplify the graph so that we don't have to
-traverse long corridors, but can skip to the action, and (2) instead
-of constructing all the paths, I just keep track of the maximum
-length.
+**Thoughts on the puzzle:** Graph traversal. In part 2, I made two
+optimisations compared to part 1:
+
+ 1. simplify the graph so that we don't have to traverse long
+    corridors, but can skip to the action (like any good DM would do),
+
+ 2. instead of constructing all the paths, I just keep track of the
+    maximum length.
 
 The `longestPath` function is still slower than what I would
 like. I think that the `visited` argument could/should be converted to
@@ -414,17 +419,26 @@ Day 24: Never Tell Me The Odds
 **Parsing strategy:** String splitting
 
 **Thoughts on the puzzle:** Today was all about using large rational
-numbers (for me at least). The code for part 1 is rather messy. High
-school maths is several decades away, and it shows. In AoC 2021 I use
-[`SBV`](https://leventerkok.github.io/sbv/) and since part 2 seems to
-match what `SBV` can handle, I decided to use that again. It worked
-like a charm. The main downside was that at the time of the event,
-`SBV` didn't support my default `ghc`, so I had to set which `ghc` to
-use in my `cabal.project` file. When using an SMT solver it helps to
-know that it much faster to solve equations in ℚ rather than ℤ and
-then check if the solution is an integer solution, in this case it is
-(for me at least). Looking at the constrains, we could probably have
-done it with simple matrix manipulation.
+numbers (for me at least).  The code for part 1 is rather messy. High
+school maths is several decades away, and it shows.
+
+In AoC 2021 I used [`SBV`](https://leventerkok.github.io/sbv/) for
+[day
+24](https://github.com/kfl/adventofcode_2021/blob/main/day24/day24.hs)
+to great effect, and since part 2 seems to match what `SBV` can
+handle, I decided to use `SBV` again. It worked like a charm. The main
+downside was that at the time of the event, `SBV` didn't support my
+default `ghc`, so I had to set which `ghc` to use in my
+`cabal.project` file. When using an SMT solver it helps to know that
+it much faster to solve equations in ℝ (usually ℚ) rather than ℤ and
+then check if the found solution is an integer solution, in this case
+it is (for me at least). The reason is that is nonlinear integer
+arithmetic is *undecidable* (but still solvable in some cases), while
+nonlinear real arithmetic is *decidable* (proved by Tarski (1951)).
+
+Looking at the constrains, we could probably have done it with
+something less powerful than an SMT solver.
+
 
 
 Day 25: Snowverload
