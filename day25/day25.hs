@@ -12,7 +12,6 @@ import Data.Bifunctor (bimap,first,second)
 import Data.Sequence (Seq (..), (><))
 import qualified Data.Sequence as Seq
 
-import Data.Function (on)
 import Data.Ord (Down(..))
 import Algorithm.Search qualified as AS
 import Data.Vector.Unboxed qualified as U
@@ -66,14 +65,14 @@ edgeSet = Map.foldlWithKey' edges Set.empty
 
 fromEdgeSet :: Ord k => Set (Set k) -> Connections k
 fromEdgeSet edges = Map.fromListWith Set.union cs
-  where ~cs = [ kd | edge <- Set.toList edges
-                   , let [n1, n2] = Set.toList edge, kd <- [(n1, [n2]), (n2, [n1])]]
+  where cs = [ kd | edge <- Set.toList edges
+                  , let [n1, n2] = Set.toList edge, kd <- [(n1, [n2]), (n2, [n1])]]
 
 invariant conn = bothWays conn == fromEdgeSet (edgeSet conn)
 
 showConnections name conns = do
   let edges = edgeSet conns
-      ~trans = [ printf "  %s -- %s" n1 n2 | [n1, n2] <-  map Set.toList $ Set.toList edges]
+      trans = [ printf "  %s -- %s" n1 n2 | [n1, n2] <-  map Set.toList $ Set.toList edges]
       dotfile = name ++ ".dot"
       pdffile = name ++ ".pdf"
       pre = "graph connections {"
@@ -98,8 +97,8 @@ disconnect conns bridges = (group1, Map.keysSet disconnected Set.\\ group1)
         (someElem, _) = Map.findMin disconnected
         group1 = collect [] [someElem]
 
-
-pPrint x = P.pPrintOpt P.CheckColorTty smallIndent x
+pPrint :: Show a => a -> IO ()
+pPrint = P.pPrintOpt P.CheckColorTty smallIndent
   where smallIndent = P.defaultOutputOptionsNoColor { P.outputOptionsIndentAmount = 2
                                                     , P.outputOptionsCompactParens = True}
 
@@ -108,7 +107,7 @@ allPairs keys = [ (k1, k2) | k1 : ks <- L.tails keys, k2 <- ks]
 pairUp (x:y:rest) = (x,y) : pairUp rest
 pairUp _ = []
 
-bridgesSlow conns' = Set.fromList $ map (Set.map retern . (`Set.elemAt` edges)) $ topEdges
+bridgesSlow conns' = Set.fromList $ map (Set.map retern . (`Set.elemAt` edges)) topEdges
   where internMap = Map.fromList $ zip (Map.keys conns') [0..]
         intern s = internMap ! s
         reternMap = Map.fromList $ map (\(x,y) -> (y,x)) $ Map.toList internMap
@@ -147,10 +146,10 @@ bfs next found start = search Set.empty [(start, 0)]
     search visited ((curr, dist) :<| rest)
       | found curr = pure dist
       | curr `Set.member` visited = search visited rest
-      | otherwise = search (Set.insert curr visited) (rest >< following)
+      | otherwise = search (Set.insert curr visited) $ rest >< following
       where following = Seq.fromList $ map (, dist+1) $ next curr
 
-bridges conns' = Set.fromList $ map (`Set.elemAt` edges) $ topEdges
+bridges conns' = Set.fromList $ map (`Set.elemAt` edges) topEdges
   where edges = edgeSet conns'
         conns = Map.map Set.toList conns'
         next k = conns ! k
@@ -159,7 +158,7 @@ bridges conns' = Set.fromList $ map (`Set.elemAt` edges) $ topEdges
 
         bfsEdge edge@[src, dst] = fromJust $ bfs (prune edge) (== dst) src
         edgeCount = zip [0..] $ runPar $ parMap bfsEdge $ Set.toAscList edges
-        sorted@((_, max) : _) = L.sortOn (Down . snd) $ edgeCount
+        sorted@((_, max) : _) = L.sortOn (Down . snd) edgeCount
         topEdges = map fst $ takeWhile ((== max) . snd) sorted
 
 part1 :: Input -> Int
