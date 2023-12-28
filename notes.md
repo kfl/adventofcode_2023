@@ -457,3 +457,13 @@ revisited"](https://doi.org/10.1016/j.ipl.2013.09.010).
 Added a brute-force solution just for moral completeness. It currently
 uses ~5m for finding the solution, and it doesn't work for the given
 test case, so a papyrus victory.
+
+Added a solution where I remove each edge, `(src, dst)`, and then find
+the shortest path between `src` and `dst`, then I remove all the edges
+with the highest shortest path. This is under the assumption that the
+real bridges are amongst these. This is embarrassingly parallel and it
+works both for the sample test case and for my input.
+
+The "correct" general solution would be to implement a [min-cut
+algorithm](https://en.wikipedia.org/wiki/Minimum_cut) (or a 3-edge
+connected component algorithm for this particular case).

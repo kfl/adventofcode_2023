@@ -1,4 +1,4 @@
-{-# LANGUAGE Strict, OverloadedLists, ViewPatterns #-}
+{-# LANGUAGE OverloadedLists, ViewPatterns #-}
 module Main where
 
 import qualified Data.Char as C
@@ -9,12 +9,17 @@ import qualified Data.Set as Set
 import Data.Set (Set)
 import Data.Bifunctor (bimap,first,second)
 
+import Data.Sequence (Seq (..), (><))
+import qualified Data.Sequence as Seq
+
 import Data.Function (on)
 import Data.Ord (Down(..))
 import Algorithm.Search qualified as AS
 import Data.Vector.Unboxed qualified as U
 import Data.Vector.Unboxed.Mutable qualified as UM
 import Control.Monad (forM_)
+import Data.Maybe (fromJust)
+import Control.Monad.Par (runPar, parMap)
 
 import Text.Printf
 import System.Process (callCommand)
@@ -103,8 +108,7 @@ allPairs keys = [ (k1, k2) | k1 : ks <- L.tails keys, k2 <- ks]
 pairUp (x:y:rest) = (x,y) : pairUp rest
 pairUp _ = []
 
-
-bridges conns' = Set.fromList $ map (Set.map retern . (`Set.elemAt` edges)) $ topEdges
+bridgesSlow conns' = Set.fromList $ map (Set.map retern . (`Set.elemAt` edges)) $ topEdges
   where internMap = Map.fromList $ zip (Map.keys conns') [0..]
         intern s = internMap ! s
         reternMap = Map.fromList $ map (\(x,y) -> (y,x)) $ Map.toList internMap
@@ -136,6 +140,27 @@ bridges conns' = Set.fromList $ map (Set.map retern . (`Set.elemAt` edges)) $ to
         edgeCount = loop $ U.replicate (Set.size edges) 0
         topEdges = take 3 $ map fst $ L.sortOn (Down . snd) $ U.toList $ U.indexed edgeCount
 
+bfs :: Ord a => (a -> [a]) -> (a -> Bool) -> a -> Maybe Int
+bfs next found start = search Set.empty [(start, 0)]
+  where
+    search _ Empty = Nothing
+    search visited ((curr, dist) :<| rest)
+      | found curr = pure dist
+      | curr `Set.member` visited = search visited rest
+      | otherwise = search (Set.insert curr visited) (rest >< following)
+      where following = Seq.fromList $ map (, dist+1) $ next curr
+
+bridges conns' = Set.fromList $ map (`Set.elemAt` edges) $ topEdges
+  where edges = edgeSet conns'
+        conns = Map.map Set.toList conns'
+        next k = conns ! k
+        prune edge src | src `Set.member` edge = filter (`Set.notMember` edge) $ next src
+                       | otherwise = next src
+
+        bfsEdge edge@[src, dst] = fromJust $ bfs (prune edge) (== dst) src
+        edgeCount = zip [0..] $ runPar $ parMap bfsEdge $ Set.toAscList edges
+        sorted@((_, max) : _) = L.sortOn (Down . snd) $ edgeCount
+        topEdges = map fst $ takeWhile ((== max) . snd) sorted
 
 part1 :: Input -> Int
 part1Cheese input = Set.size group1 * Set.size group2

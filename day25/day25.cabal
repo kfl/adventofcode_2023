@@ -14,10 +14,12 @@ executable day25
 
     build-depends:    base >= 4 && < 5,
                       containers,
+                      monad-par,
                       process >= 1.6.18.0,
                       pretty-simple,
                       search-algorithms,
-                      vector,
+                      vector
+
 
 
     hs-source-dirs:   .
