@@ -94,7 +94,7 @@ neighbours2 (x,y) = \case
   SlopeR -> [(x+1, y), (x-1, y)]
 
 simplifyGraph :: Pos -> (Pos -> [Pos]) -> (Pos -> Bool) -> (V.Vector (U.Vector (Int, Int)), Pos -> Int)
-simplifyGraph start next found  = (vecmap, intern)
+simplifyGraph start next found = (vecmap, intern)
   where
     loop seen [] = seen
     loop seen ((curr, _) : rest)
@@ -116,21 +116,21 @@ simplifyGraph start next found  = (vecmap, intern)
     vecmap = V.generate (Map.size intmap) (\i -> Map.findWithDefault [] i intmap)
 
 
-longestPath :: Int -> Int -> (Int -> (U.Vector (Int, Int))) -> Int -> Int
-longestPath !n !start next !end = execState (dfs empty 0 (start, 0)) (-1)
+longestPath graph start end = execState (dfs empty 0 (start, 0)) (-1)
   where
-    empty = U.replicate n $ B.Bit False
+    empty = U.replicate (V.length graph) $ B.Bit False
     member x bs = B.unBit $ bs U.! x
     set x bs = U.modify (\v -> UM.write v x $ B.Bit True) bs
+    next i = graph V.! i
 
     dfs !visited !pathlen (curr, dist)
-      | curr == end = modify' $ max $ dist+pathlen
+      | curr == end           = modify' $ max $ dist+pathlen
       | curr `member` visited = return ()
-      | otherwise = U.mapM_ (dfs (set curr visited) (dist+pathlen)) $ next curr
+      | otherwise             = U.mapM_ (dfs (set curr visited) (dist+pathlen)) $ next curr
 
 
 part2 :: Input -> Int
-part2 hikingMap = longestPath n (intern start) simplerNext (intern end)
+part2 hikingMap = longestPath simpler (intern start) (intern end)
   where
     (start, Path) = Map.findMin hikingMap
     (end, Path) = Map.findMax hikingMap
