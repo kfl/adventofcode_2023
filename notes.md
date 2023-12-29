@@ -418,6 +418,11 @@ like. I think that the `visited` argument could/should be converted to
 a memoisation map, instead of just keeping track of which positions
 have been visited.
 
+**Post-event optimisation:** Made part 2 twice as fast by using
+bit-vectors instead of hash tables. However, it still uses 2.5s which
+makes this day the only day that uses more than 1s.
+
+
 
 Day 24: Never Tell Me The Odds
 ------------------------------
