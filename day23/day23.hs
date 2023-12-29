@@ -8,7 +8,10 @@ import Data.Map.Strict (Map, (!))
 
 import Data.Maybe (mapMaybe, fromJust)
 import Data.Bifunctor (first, second)
-import Control.Monad.State.Strict (execState, modify')
+--import Control.Monad.State.Strict (execState, modify')
+import Control.Monad.Writer.CPS (execWriter, tell)
+
+import Data.Semigroup
 
 import qualified Data.Bit as B
 import qualified Data.Vector as V
@@ -115,8 +118,8 @@ simplifyGraph start next found = (vecmap, intern)
                             (n, cs) <- Map.assocs simpler ]
     vecmap = V.generate (Map.size intmap) (\i -> Map.findWithDefault [] i intmap)
 
-
-longestPath graph start end = execState (dfs empty 0 (start, 0)) (-1)
+longestPath :: V.Vector (U.Vector (Int, Int)) -> Int -> Int -> Int
+longestPath graph start end = getMax $ execWriter (dfs empty 0 (start, 0))
   where
     empty = U.replicate (V.length graph) $ B.Bit False
     member x bs = B.unBit $ bs U.! x
@@ -124,9 +127,9 @@ longestPath graph start end = execState (dfs empty 0 (start, 0)) (-1)
     next i = graph V.! i
 
     dfs !visited !pathlen (curr, dist)
-      | curr == end           = modify' $ max $ dist+pathlen
-      | curr `member` visited = return ()
-      | otherwise             = U.mapM_ (dfs (set curr visited) (dist+pathlen)) $ next curr
+      | curr == end = tell $ Max $ dist+pathlen
+      | otherwise   = U.mapM_ (dfs (set curr visited) (dist+pathlen)) $
+                      U.filter (\(n,_) -> not $ n `member` visited) $ next curr
 
 
 part2 :: Input -> Int
