@@ -16,6 +16,7 @@ executable day23
                       containers,
                       hashable >= 1.4.3.0,
                       bitvec >= 1.1.5.0,
+                      mtl >= 2.3.1,
                       unordered-containers,
                       vector >= 0.13.0.0
 

@@ -8,10 +8,12 @@ import Data.Map.Strict (Map, (!))
 
 import Data.Maybe (mapMaybe, fromJust)
 import Data.Bifunctor (first, second)
+import Control.Monad.State.Strict (execState, modify')
 
 import qualified Data.Bit as B
-import qualified Data.Vector.Unboxed as BU
-import qualified Data.Vector.Unboxed.Mutable as BUM
+import qualified Data.Vector as V
+import qualified Data.Vector.Unboxed as U
+import qualified Data.Vector.Unboxed.Mutable as UM
 
 import Data.Hashable
 import qualified Data.HashSet as Set
@@ -91,10 +93,8 @@ neighbours2 (x,y) = \case
   SlopeL -> [(x-1, y), (x+1, y)]
   SlopeR -> [(x+1, y), (x-1, y)]
 
-simplifyGraph :: Pos -> (Pos -> [Pos]) -> (Pos -> Bool) -> (Map Int [(Int, Int)], Pos -> Int)
-simplifyGraph start next found  = (Map.fromList [ (intern n, map (first intern) cs) |
-                                                  (n, cs) <- Map.assocs simpler ],
-                                   intern)
+simplifyGraph :: Pos -> (Pos -> [Pos]) -> (Pos -> Bool) -> (V.Vector (U.Vector (Int, Int)), Pos -> Int)
+simplifyGraph start next found  = (vecmap, intern)
   where
     loop seen [] = seen
     loop seen ((curr, _) : rest)
@@ -111,27 +111,26 @@ simplifyGraph start next found  = (Map.fromList [ (intern n, map (first intern) 
 
     internMap = Map.fromList $ zip (Map.keys simpler) [0..]
     intern x = internMap ! x
+    intmap = Map.fromList [ (intern n, U.fromList $ map (first intern) cs) |
+                            (n, cs) <- Map.assocs simpler ]
+    vecmap = V.generate (Map.size intmap) (\i -> Map.findWithDefault [] i intmap)
 
 
-longestPath :: Int -> Int -> (Int -> [(Int, Int)]) -> (Int -> Bool) -> Int
-longestPath n start next found = fromJust $ dfs empty (start, 0)
+longestPath :: Int -> Int -> (Int -> (U.Vector (Int, Int))) -> Int -> Int
+longestPath !n !start next !end = execState (dfs empty 0 (start, 0)) (-1)
   where
-    empty = BU.replicate n $ B.Bit False
-    member x bs = B.unBit $ bs BU.! x
-    set x bs = BU.modify (\v -> BUM.write v x $ B.Bit True) bs
+    empty = U.replicate n $ B.Bit False
+    member x bs = B.unBit $ bs U.! x
+    set x bs = U.modify (\v -> UM.write v x $ B.Bit True) bs
 
-    dfs visited (curr, dist)
-      | found curr = pure dist
-      | curr `member` visited = Nothing
-      | otherwise =
-          case mapMaybe (dfs visited') $ next curr of
-            [] -> Nothing
-            xs -> pure $ dist + maximum xs
-      where visited' = set curr visited
+    dfs !visited !pathlen (curr, dist)
+      | curr == end = modify' $ max $ dist+pathlen
+      | curr `member` visited = return ()
+      | otherwise = U.mapM_ (dfs (set curr visited) (dist+pathlen)) $ next curr
 
 
 part2 :: Input -> Int
-part2 hikingMap = longestPath n (intern start) simplerNext (intern end ==)
+part2 hikingMap = longestPath n (intern start) simplerNext (intern end)
   where
     (start, Path) = Map.findMin hikingMap
     (end, Path) = Map.findMax hikingMap
@@ -139,8 +138,8 @@ part2 hikingMap = longestPath n (intern start) simplerNext (intern end ==)
     found = (end ==)
 
     (simpler, intern) = simplifyGraph start next found
-    n = Map.size simpler
-    simplerNext n = Map.findWithDefault [] n simpler
+    n = V.length simpler
+    simplerNext n = simpler V.! n
 
 answer2 = part2 <$> input
 
