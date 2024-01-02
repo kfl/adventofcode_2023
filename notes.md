@@ -418,9 +418,9 @@ like. I think that the `visited` argument could/should be converted to
 a memoisation map, instead of just keeping track of which positions
 have been visited.
 
-**Post-event optimisation:** Made part more than four times as fast by
+**Post-event optimisation:** Got a speedup of ~5 for part 2 by
 using bit-vectors instead of hash tables, and by taking advantage of
-that the graph don't change. However, it still uses 1.2s which makes
+that the graph don't change. However, it still uses 1.02s which makes
 this day the only day that uses more than 1s.
 
 
