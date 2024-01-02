@@ -11,8 +11,6 @@ import Data.Bifunctor (first, second)
 import Control.Monad.Writer.CPS (execWriter, tell)
 import Control.Monad.Par.Scheds.Sparks qualified as CM
 
-
-
 import Data.Semigroup
 
 import qualified Data.Bit as B
@@ -23,6 +21,11 @@ import qualified Data.Vector.Generic as G
 
 import Data.Hashable
 import qualified Data.HashSet as Set
+
+import Text.Printf
+import System.Process (callCommand)
+
+
 
 test =  parse [ "#.#####################"
               , "#.......#########...###"
@@ -99,19 +102,19 @@ neighbours2 (x,y) = \case
   SlopeL -> [(x-1, y), (x+1, y)]
   SlopeR -> [(x+1, y), (x-1, y)]
 
-simplifyGraph :: Pos -> (Pos -> [Pos]) -> (Pos -> Bool) -> (V.Vector (U.Vector (Int, Int)), Pos -> Int)
-simplifyGraph start next found = (vecmap, intern)
+simplifyGraph :: Pos -> (Pos -> [Pos]) -> (V.Vector (U.Vector (Int, Int)), Pos -> Int)
+simplifyGraph start next = (vecmap, intern)
   where
     loop seen [] = seen
     loop seen ((curr, _) : rest)
       | Map.member curr seen = loop seen rest
       | otherwise = loop (Map.insert curr nodes seen) (nodes ++ rest)
-      where nodes = [ n | c <- next curr, n <- straight c curr 1]
+      where nodes = [ n | c <- next curr, n <- straight curr c 1]
 
     straight from to sofar =
-      case filter (to /=) $ next from of
-        [corridor] | not $ found corridor -> straight corridor from (sofar + 1)
-        _ -> [(from, sofar)]
+      case filter (from /=) $ next to of
+        [corridor] -> straight to corridor (sofar + 1)
+        _ -> [(to, sofar)]
 
     simpler = loop Map.empty [(start, 0)]
 
@@ -162,17 +165,28 @@ longestPathP graph start end = getMax $ CM.runPar (parallel 0 empty 0 (start, 0)
                          mconcatV <$> mapF (recurse (set curr visited) (dist + pathlen)) nextNodes
 
 
-part2 :: Input -> Int
-part2 hikingMap = longestPathP simpler (intern start) (intern end)
+showSimplerGraph name hikingMap = do
+  let (graph, start, end) = fromHikingMap hikingMap
+      trans = [ printf "  %d -> %d [label=\"%d\"];" n1 n2 c | (n1, cs) <- V.toList $ V.indexed graph, (n2, c) <- U.toList cs]
+      dotfile = name ++ ".dot"
+      pdffile = name ++ ".pdf"
+      pre = "digraph connections {"
+  writeFile dotfile $ unlines $ pre : trans ++ ["}"]
+  callCommand $ "neato -Tpdf "++dotfile ++" -o "++pdffile
+  callCommand $ "open -a Preview "++pdffile
+
+fromHikingMap hikingMap = (simpler, intern start, intern end)
   where
     (start, Path) = Map.findMin hikingMap
     (end, Path) = Map.findMax hikingMap
     next p = maybe [] (filter (`Map.member` hikingMap) . neighbours2 p) $ Map.lookup p hikingMap
-    found = (end ==)
 
-    (simpler, intern) = simplifyGraph start next found
-    n = V.length simpler
-    simplerNext n = simpler V.! n
+    (simpler, intern) = simplifyGraph start next
+
+part2 :: Input -> Int
+part2 hikingMap = longestPathP simpler start end
+  where
+    (simpler, start, end) = fromHikingMap hikingMap
 
 answer2 = part2 <$> input
 

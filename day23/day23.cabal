@@ -13,13 +13,14 @@ executable day23
     main-is: day23.hs
 
     build-depends:    base >= 4 && < 5,
+                      bitvec >= 1.1.5.0,
                       containers,
                       hashable >= 1.4.3.0,
-                      bitvec >= 1.1.5.0,
+                      monad-par,
                       mtl >= 2.3.1,
+                      process >= 1.6.18.0,
                       unordered-containers,
-                      vector >= 0.13.0.0,
-                      monad-par
+                      vector >= 0.13.0.0
 
 
     hs-source-dirs:   .

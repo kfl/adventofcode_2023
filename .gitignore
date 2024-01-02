@@ -9,6 +9,8 @@ _build
 *.o
 *.uo
 *.ui
+*.dot
+*.pdf
 /aoc-gitcrypt.key
 /session_cookie.txt
 /day01/day01
