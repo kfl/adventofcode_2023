@@ -6,10 +6,12 @@ import qualified Data.List as L
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map, (!))
 
-import Data.Maybe (mapMaybe, fromJust)
 import Data.Bifunctor (first, second)
---import Control.Monad.State.Strict (execState, modify')
+
 import Control.Monad.Writer.CPS (execWriter, tell)
+import Control.Monad.Par.Scheds.Sparks qualified as CM
+
+
 
 import Data.Semigroup
 
@@ -17,6 +19,7 @@ import qualified Data.Bit as B
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U
 import qualified Data.Vector.Unboxed.Mutable as UM
+import qualified Data.Vector.Generic as G
 
 import Data.Hashable
 import qualified Data.HashSet as Set
@@ -132,8 +135,35 @@ longestPath graph start end = getMax $ execWriter (dfs empty 0 (start, 0))
                       U.filter (\(n,_) -> not $ n `member` visited) $ next curr
 
 
+longestPathP :: V.Vector (U.Vector (Int, Int)) -> Int -> Int -> Int
+longestPathP graph start end = getMax $ CM.runPar (parallel 0 empty 0 (start, 0))
+  where
+    empty = U.replicate (V.length graph) $ B.Bit False
+    member x bs = B.unBit $ bs U.! x
+    set x bs = U.modify (\v -> UM.write v x $ B.Bit True) bs
+    next i = graph V.! i
+
+    toVisit n visited = U.convert $ U.filter (\(n, _) -> not $ n `member` visited) $ next n
+
+    mconcatV v = G.foldl' mappend mempty v
+
+    maxDepth = 20
+    parMapM f xs = V.mapM (CM.spawn . f) xs >>= V.mapM CM.get
+
+    parallel depth
+      | depth >= maxDepth = sequential
+      | otherwise = common (parallel (depth + 1)) parMapM
+
+    sequential = common sequential U.mapM
+
+    common recurse mapF visited pathlen (curr, dist)
+      | curr == end = pure $ Max $ dist + pathlen
+      | otherwise   = do let nextNodes = toVisit curr visited
+                         mconcatV <$> mapF (recurse (set curr visited) (dist + pathlen)) nextNodes
+
+
 part2 :: Input -> Int
-part2 hikingMap = longestPath simpler (intern start) (intern end)
+part2 hikingMap = longestPathP simpler (intern start) (intern end)
   where
     (start, Path) = Map.findMin hikingMap
     (end, Path) = Map.findMax hikingMap

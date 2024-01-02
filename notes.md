@@ -423,6 +423,8 @@ using bit-vectors instead of hash tables, and by taking advantage of
 that the graph don't change. However, it still uses 1.02s which makes
 this day the only day that uses more than 1s.
 
+Used parallelism to get below 1s.
+
 
 Day 24: Never Tell Me The Odds
 ------------------------------
